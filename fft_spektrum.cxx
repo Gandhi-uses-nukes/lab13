@@ -24,11 +24,24 @@ int main(int argc, char** argv){
 
 	const int N = 16384;
 	double L;
+	
+	ifstream InStream;
+	InStream.open(in_file);
 
 	// Allocate memory
 	fftw_complex* f = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
 	double* inR  = (double*) malloc(sizeof(double)*N);
-
+	
+	double di1,di2;
+	int i = 0;
+	while(InStream.good() and i<N)
+	{
+		InStream >> di1;
+		InStream >> di2;
+		inR[i] = di2;
+		i++;
+	}
+	L = di1;
   // Create plan
 	fftw_plan FW  = fftw_plan_dft_r2c_1d(N, inR, f, FFTW_ESTIMATE);
 
@@ -48,6 +61,8 @@ int main(int argc, char** argv){
 	fftw_destroy_plan(FW);
   fftw_free(f);
   free(inR);
+	
+	InStream.close();
 
 	return 0;
 }
